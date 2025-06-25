@@ -1,70 +1,70 @@
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:30:17
+  --> $DIR/use_and_path.rs:39:17
    |
 LL |     use leptos::wasm_bindgen::JsCast;
    |                 ^^^^^^^^^^^^
    |
-   = help: consider using `use wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
    = note: `#[warn(leptos_reexports)]` on by default
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:34:19
+  --> $DIR/use_and_path.rs:43:19
    |
 LL |     use ::leptos::serde::Serialize;
    |                   ^^^^^
    |
-   = help: consider using `use leptos::serde::Serialize` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `leptos::serde::Serialize` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:39:18
+  --> $DIR/use_and_path.rs:48:18
    |
 LL |     use leptos::{serde, wasm_bindgen};
    |                  ^^^^^
    |
-   = help: consider using `use serde` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `serde` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:39:25
+  --> $DIR/use_and_path.rs:48:25
    |
 LL |     use leptos::{serde, wasm_bindgen};
    |                         ^^^^^^^^^^^^
    |
-   = help: consider using `use wasm_bindgen` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `wasm_bindgen` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:41:18
+  --> $DIR/use_and_path.rs:50:18
    |
 LL |     use {leptos::serde_json, leptos::tracing};
    |                  ^^^^^^^^^^
    |
-   = help: consider using `use serde_json` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `serde_json` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:41:38
+  --> $DIR/use_and_path.rs:50:38
    |
 LL |     use {leptos::serde_json, leptos::tracing};
    |                                      ^^^^^^^
    |
-   = help: consider using `use tracing` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `tracing` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:44:30
+  --> $DIR/use_and_path.rs:53:30
    |
 LL |     use leptos::{prelude::*, web_sys::HtmlElement};
    |                              ^^^^^^^
    |
-   = help: consider using `use web_sys::HtmlElement` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `web_sys::HtmlElement` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:49:17
+  --> $DIR/use_and_path.rs:58:17
    |
 LL |     use leptos::web_sys::*;
    |                 ^^^^^^^
    |
-   = help: consider using `use web_sys::*` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+   = help: consider using `web_sys` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:54:5
+  --> $DIR/use_and_path.rs:63:5
    |
 LL |     use leptos::*;
    |     ^^^^^^^^^^^^^^
@@ -72,7 +72,7 @@ LL |     use leptos::*;
    = help: do not import using `leptos::*`. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:58:5
+  --> $DIR/use_and_path.rs:67:5
    |
 LL |     use ::leptos::*;
    |     ^^^^^^^^^^^^^^^^
@@ -80,7 +80,7 @@ LL |     use ::leptos::*;
    = help: do not import using `leptos::*`. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:63:21
+  --> $DIR/use_and_path.rs:72:21
    |
 LL |     let _ = leptos::wasm_bindgen::JsCast;
    |                     ^^^^^^^^^^^^
@@ -88,12 +88,20 @@ LL |     let _ = leptos::wasm_bindgen::JsCast;
    = help: consider using `wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
 warning: usage of a third party library re-export from `leptos`
-  --> $DIR/use_and_path.rs:66:23
+  --> $DIR/use_and_path.rs:75:23
    |
 LL |     let _ = ::leptos::serde::Serialize;
    |                       ^^^^^
    |
    = help: consider using `leptos::serde::Serialize` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
 
-warning: 12 warnings emitted
+warning: usage of a third party library re-export from `leptos`
+  --> $DIR/use_and_path.rs:78:21
+   |
+LL |     let _ = leptos::web_sys::js_sys::Array::new();
+   |                     ^^^^^^^
+   |
+   = help: consider using `web_sys::js_sys::Array` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/leptos-more/leptos_reexports#readme
+
+warning: 13 warnings emitted
 

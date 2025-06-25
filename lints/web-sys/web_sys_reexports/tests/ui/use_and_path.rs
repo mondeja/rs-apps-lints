@@ -4,6 +4,11 @@ pub mod web_sys {
 
     pub mod js_sys {
         pub struct Array;
+        impl Array {
+            pub fn new() -> Self {
+                Array
+            }
+        }
         pub struct Function;
     }
 
@@ -49,6 +54,9 @@ fn inline() {
 
     // root
     let _ = ::web_sys::js_sys::Array;
+
+    // call
+    let _ = web_sys::js_sys::Array::new();
 }
 
 fn main() {

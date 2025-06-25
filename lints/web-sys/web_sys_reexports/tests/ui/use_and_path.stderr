@@ -1,54 +1,54 @@
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:17:18
+  --> $DIR/use_and_path.rs:22:18
    |
 LL |     use web_sys::wasm_bindgen::JsCast;
    |                  ^^^^^^^^^^^^
    |
-   = help: consider using `use wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
    = note: `#[warn(web_sys_reexports)]` on by default
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:21:20
+  --> $DIR/use_and_path.rs:26:20
    |
 LL |     use ::web_sys::js_sys::Array;
    |                    ^^^^^^
    |
-   = help: consider using `use web_sys::js_sys::Array` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `web_sys::js_sys::Array` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:26:19
+  --> $DIR/use_and_path.rs:31:19
    |
 LL |     use web_sys::{js_sys, wasm_bindgen};
    |                   ^^^^^^
    |
-   = help: consider using `use js_sys` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `js_sys` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:26:27
+  --> $DIR/use_and_path.rs:31:27
    |
 LL |     use web_sys::{js_sys, wasm_bindgen};
    |                           ^^^^^^^^^^^^
    |
-   = help: consider using `use wasm_bindgen` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `wasm_bindgen` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:29:32
+  --> $DIR/use_and_path.rs:34:32
    |
 LL |     use web_sys::{HtmlElement, js_sys::Function};
    |                                ^^^^^^
    |
-   = help: consider using `use js_sys::Function` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `js_sys::Function` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:35:18
+  --> $DIR/use_and_path.rs:40:18
    |
 LL |     use web_sys::js_sys::*;
    |                  ^^^^^^
    |
-   = help: consider using `use js_sys::*` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+   = help: consider using `js_sys` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:39:5
+  --> $DIR/use_and_path.rs:44:5
    |
 LL |     use web_sys::*;
    |     ^^^^^^^^^^^^^^^
@@ -56,7 +56,7 @@ LL |     use web_sys::*;
    = help: do not import using `web_sys::*`. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:43:5
+  --> $DIR/use_and_path.rs:48:5
    |
 LL |     use ::web_sys::*;
    |     ^^^^^^^^^^^^^^^^^
@@ -64,7 +64,7 @@ LL |     use ::web_sys::*;
    = help: do not import using `web_sys::*`. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:48:22
+  --> $DIR/use_and_path.rs:53:22
    |
 LL |     let _ = web_sys::wasm_bindgen::JsCast;
    |                      ^^^^^^^^^^^^
@@ -72,12 +72,20 @@ LL |     let _ = web_sys::wasm_bindgen::JsCast;
    = help: consider using `wasm_bindgen::JsCast` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 warning: usage of a third party library re-export from `web_sys`
-  --> $DIR/use_and_path.rs:51:24
+  --> $DIR/use_and_path.rs:56:24
    |
 LL |     let _ = ::web_sys::js_sys::Array;
    |                        ^^^^^^
    |
    = help: consider using `web_sys::js_sys::Array` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
-warning: 10 warnings emitted
+warning: usage of a third party library re-export from `web_sys`
+  --> $DIR/use_and_path.rs:59:22
+   |
+LL |     let _ = web_sys::js_sys::Array::new();
+   |                      ^^^^^^
+   |
+   = help: consider using `js_sys::Array` instead. For further information visit https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
+
+warning: 11 warnings emitted
 

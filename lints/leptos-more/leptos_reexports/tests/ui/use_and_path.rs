@@ -10,6 +10,15 @@ pub mod leptos {
     pub mod web_sys {
         pub struct Element;
         pub struct HtmlElement;
+
+        pub mod js_sys {
+            pub struct Array;
+            impl Array {
+                pub fn new() -> Array {
+                    Array
+                }
+            }
+        }
     }
 
     pub mod prelude {
@@ -64,6 +73,9 @@ fn inline() {
 
     // root
     let _ = ::leptos::serde::Serialize;
+
+    // call
+    let _ = leptos::web_sys::js_sys::Array::new();
 }
 
 fn main() {

@@ -19,7 +19,7 @@ Put the next configuration in the _Cargo.toml_ of your workspace.
 
 ```toml
 [workspace.metadata.dylint]
-libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.0", pattern = "lints/*" }]
+libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.1", pattern = "lints/*" }]
 ```
 
 <!-- markdownlint-enable line-length -->
@@ -42,7 +42,7 @@ See `cargo dylint --help` for more information.
 
 ```toml
 [workspace.metadata.dylint]
-libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.0", pattern = "lints/*" }]
+libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.1", pattern = "lints/*" }]
 ```
 
 <!-- markdownlint-enable line-length -->
@@ -54,7 +54,7 @@ use the `pattern` field to specify which lints to include.
 
 ```toml
 [workspace.metadata.dylint]
-libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.0", pattern = "lints/web-sys" }]
+libraries = [{ git = "https://github.com/mondeja/rs-apps-lints", tag = "v0.1.1", pattern = "lints/web-sys" }]
 ```
 <!-- markdownlint-enable line-length -->
 

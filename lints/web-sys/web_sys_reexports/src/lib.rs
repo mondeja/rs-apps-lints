@@ -5,7 +5,7 @@
 extern crate rustc_hir;
 
 use clippy_utils::diagnostics::span_lint_and_help;
-use rustc_hir::{Expr, ExprKind, Item, ItemKind, Path, QPath, UseKind, UsePath};
+use rustc_hir::{HirId, Item, ItemKind, Path, UseKind, UsePath};
 use rustc_lint::{LateContext, LateLintPass};
 
 const HELP_FURTHER_INFO: &str = concat!(
@@ -67,73 +67,13 @@ dylint_linting::declare_late_lint! {
 
 static FORBIDDEN_REEXPORTS: [&str; 2] = ["wasm_bindgen", "js_sys"];
 
-impl WebSysReexports {
-    fn lint_single_path<R>(
-        cx: &LateContext,
-        path: &Path<R>,
-        web_sys_from_root: bool,
-        help_rewrite_prefix: &str,
-    ) {
-        let second_segmment_index = if web_sys_from_root { 2 } else { 1 };
-        if let Some(second_segment) = path.segments.get(second_segmment_index) {
-            let name = second_segment.ident.name.as_str();
-            if FORBIDDEN_REEXPORTS.contains(&name) {
-                let span = second_segment.ident.span;
-                let second_and_next_segments = &path.segments[1..];
-                let rewrite_path = second_and_next_segments
-                    .iter()
-                    .map(|s| s.ident.name.as_str())
-                    .collect::<Vec<_>>();
-                let rewrite_path_str = rewrite_path.join("::");
-                span_lint_and_help(
-                    cx,
-                    WEB_SYS_REEXPORTS,
-                    span,
-                    "usage of a third party library re-export from `web_sys`",
-                    None,
-                    format!(
-                        "consider using `{help_rewrite_prefix}{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"
-                    ),
-                );
-            }
-        }
-    }
-}
-
 impl LateLintPass<'_> for WebSysReexports {
     fn check_item(&mut self, cx: &LateContext, item: &Item) {
         if let Some((path, use_kind, web_sys_from_root)) = is_web_sys_use_item(item) {
             match use_kind {
-                // use web_sys::wasm_bindgen::JsCast;
-                UseKind::Single(_) => {
-                    WebSysReexports::lint_single_path(cx, path, web_sys_from_root, "use ");
-                }
                 UseKind::Glob => {
                     let second_segmment_index = if web_sys_from_root { 2 } else { 1 };
-                    if let Some(second_segment) = path.segments.get(second_segmment_index) {
-                        let name = second_segment.ident.name.as_str();
-                        // use web_sys::web_sys::*;
-                        if FORBIDDEN_REEXPORTS.contains(&name) {
-                            let span = second_segment.ident.span;
-                            let second_and_next_segments = &path.segments[1..];
-                            let mut rewrite_path = second_and_next_segments
-                                .iter()
-                                .map(|s| s.ident.name.as_str())
-                                .collect::<Vec<_>>();
-                            rewrite_path.push("*");
-                            let rewrite_path_str = rewrite_path.join("::");
-                            span_lint_and_help(
-                                cx,
-                                WEB_SYS_REEXPORTS,
-                                span,
-                                "usage of a third party library re-export from `web_sys`",
-                                None,
-                                format!(
-                                    "consider using `use {rewrite_path_str}` instead. {HELP_FURTHER_INFO}"
-                                ),
-                            );
-                        }
-                    } else {
+                    if path.segments.get(second_segmment_index).is_none() {
                         // use web_sys::*;
                         span_lint_and_help(
                             cx,
@@ -145,15 +85,34 @@ impl LateLintPass<'_> for WebSysReexports {
                         );
                     }
                 }
-                // it seems that degenerate list stem is never matching
-                UseKind::ListStem => {}
+                UseKind::ListStem | UseKind::Single(_) => {}
             }
         }
     }
 
-    fn check_expr(&mut self, cx: &LateContext, expr: &Expr) {
-        if let Some((path, web_sys_from_root)) = is_web_sys_path_expr(expr) {
-            WebSysReexports::lint_single_path(cx, path, web_sys_from_root, "");
+    fn check_path(&mut self, cx: &LateContext, path: &Path, _: HirId) {
+        if let Some(web_sys_from_root) = is_web_sys_path(path) {
+            let second_segmment_index = if web_sys_from_root { 2 } else { 1 };
+            if let Some(second_segment) = path.segments.get(second_segmment_index) {
+                let name = second_segment.ident.name.as_str();
+                if FORBIDDEN_REEXPORTS.contains(&name) {
+                    let span = second_segment.ident.span;
+                    let second_and_next_segments = &path.segments[1..];
+                    let rewrite_path = second_and_next_segments
+                        .iter()
+                        .map(|s| s.ident.name.as_str())
+                        .collect::<Vec<_>>();
+                    let rewrite_path_str = rewrite_path.join("::");
+                    span_lint_and_help(
+                        cx,
+                        WEB_SYS_REEXPORTS,
+                        span,
+                        "usage of a third party library re-export from `web_sys`",
+                        None,
+                        format!("consider using `{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"),
+                    );
+                }
+            }
         }
     }
 }
@@ -182,28 +141,24 @@ fn is_web_sys_use_item<'a>(item: &'a Item) -> Option<(&'a UsePath<'a>, UseKind, 
     None
 }
 
-fn is_web_sys_path_expr<'a>(expr: &'a Expr) -> Option<(&'a Path<'a>, bool)> {
-    if let ExprKind::Path(qpath) = expr.kind
-        && let QPath::Resolved(_, path) = qpath
-    {
-        match (path.segments.first(), path.segments.get(1)) {
-            (Some(first_segment), Some(second_segment)) => {
-                let first_segment_name = first_segment.ident.name.as_str();
-                let second_segment_name = second_segment.ident.name.as_str();
-                if first_segment_name == "web_sys" {
-                    return Some((path, false));
-                } else if first_segment_name == "{{root}}" && second_segment_name == "web_sys" {
-                    return Some((path, true));
-                }
+fn is_web_sys_path(path: &Path) -> Option<bool> {
+    match (path.segments.first(), path.segments.get(1)) {
+        (Some(first_segment), Some(second_segment)) => {
+            let first_segment_name = first_segment.ident.name.as_str();
+            let second_segment_name = second_segment.ident.name.as_str();
+            if first_segment_name == "web_sys" {
+                return Some(false);
+            } else if first_segment_name == "{{root}}" && second_segment_name == "web_sys" {
+                return Some(true);
             }
-            (Some(first_segment), None) => {
-                let first_segment_name = first_segment.ident.name.as_str();
-                if first_segment_name == "web_sys" {
-                    return Some((path, false));
-                }
-            }
-            _ => {}
         }
+        (Some(first_segment), None) => {
+            let first_segment_name = first_segment.ident.name.as_str();
+            if first_segment_name == "web_sys" {
+                return Some(false);
+            }
+        }
+        _ => {}
     }
     None
 }
