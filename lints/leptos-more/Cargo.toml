@@ -1,0 +1,22 @@
+[package]
+name = "leptos_more_lints"
+authors = ["Álvaro Mondéjar Rubio"]
+description = "More dylint lints for apps created with the Leptos framework."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+leptos_reexports = { path = "./leptos_reexports", features = ["rlib"] }
+dylint_linting.workspace = true
+
+[package.metadata.rust-analyzer]
+rustc_private = true
+
+[lints]
+workspace = true

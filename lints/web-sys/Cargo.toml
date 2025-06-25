@@ -1,0 +1,22 @@
+[package]
+name = "web_sys_lints"
+authors = ["Álvaro Mondéjar Rubio"]
+description = "Dylint lints for apps that use web-sys."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+web_sys_reexports = { path = "./web_sys_reexports", features = ["rlib"] }
+dylint_linting.workspace = true
+
+[package.metadata.rust-analyzer]
+rustc_private = true
+
+[lints]
+workspace = true

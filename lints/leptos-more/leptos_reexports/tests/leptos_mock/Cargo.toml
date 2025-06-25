@@ -1,0 +1,7 @@
+[package]
+name = "leptos"
+version = "0.1.0"
+authors = ["Álvaro Mondéjar Rubio"]
+description = "Mock of the `leptos` crate, to use in tests."
+edition = "2024"
+publish = false
