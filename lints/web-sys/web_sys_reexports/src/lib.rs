@@ -67,32 +67,6 @@ dylint_linting::declare_late_lint! {
 
 static FORBIDDEN_REEXPORTS: [&str; 2] = ["wasm_bindgen", "js_sys"];
 
-impl WebSysReexports {
-    fn lint_single_path<R>(cx: &LateContext, path: &Path<R>, web_sys_from_root: bool) {
-        let second_segmment_index = if web_sys_from_root { 2 } else { 1 };
-        if let Some(second_segment) = path.segments.get(second_segmment_index) {
-            let name = second_segment.ident.name.as_str();
-            if FORBIDDEN_REEXPORTS.contains(&name) {
-                let span = second_segment.ident.span;
-                let second_and_next_segments = &path.segments[1..];
-                let rewrite_path = second_and_next_segments
-                    .iter()
-                    .map(|s| s.ident.name.as_str())
-                    .collect::<Vec<_>>();
-                let rewrite_path_str = rewrite_path.join("::");
-                span_lint_and_help(
-                    cx,
-                    WEB_SYS_REEXPORTS,
-                    span,
-                    "usage of a third party library re-export from `web_sys`",
-                    None,
-                    format!("consider using `{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"),
-                );
-            }
-        }
-    }
-}
-
 impl LateLintPass<'_> for WebSysReexports {
     fn check_item(&mut self, cx: &LateContext, item: &Item) {
         if let Some((path, use_kind, web_sys_from_root)) = is_web_sys_use_item(item) {
@@ -118,7 +92,27 @@ impl LateLintPass<'_> for WebSysReexports {
 
     fn check_path(&mut self, cx: &LateContext, path: &Path, _: HirId) {
         if let Some(web_sys_from_root) = is_web_sys_path(path) {
-            WebSysReexports::lint_single_path(cx, path, web_sys_from_root);
+            let second_segmment_index = if web_sys_from_root { 2 } else { 1 };
+            if let Some(second_segment) = path.segments.get(second_segmment_index) {
+                let name = second_segment.ident.name.as_str();
+                if FORBIDDEN_REEXPORTS.contains(&name) {
+                    let span = second_segment.ident.span;
+                    let second_and_next_segments = &path.segments[1..];
+                    let rewrite_path = second_and_next_segments
+                        .iter()
+                        .map(|s| s.ident.name.as_str())
+                        .collect::<Vec<_>>();
+                    let rewrite_path_str = rewrite_path.join("::");
+                    span_lint_and_help(
+                        cx,
+                        WEB_SYS_REEXPORTS,
+                        span,
+                        "usage of a third party library re-export from `web_sys`",
+                        None,
+                        format!("consider using `{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"),
+                    );
+                }
+            }
         }
     }
 }
