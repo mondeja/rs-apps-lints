@@ -67,10 +67,17 @@ dylint_linting::declare_late_lint! {
     "Check for usages of third party library re-exports from leptos."
 }
 
-static FORBIDDEN_REEXPORTS: [&str; 5] = ["wasm_bindgen", "web_sys", "tracing", "serde", "serde_json"];
+static FORBIDDEN_REEXPORTS: [&str; 5] =
+    ["wasm_bindgen", "web_sys", "tracing", "serde", "serde_json"];
 
 impl LeptosReexports {
-    fn lint_single_path<R>(&self, cx: &LateContext, path: &Path<R>, leptos_from_root: bool, help_rewrite_prefix: &str) {
+    fn lint_single_path<R>(
+        &self,
+        cx: &LateContext,
+        path: &Path<R>,
+        leptos_from_root: bool,
+        help_rewrite_prefix: &str,
+    ) {
         let second_segmment_index = if leptos_from_root { 2 } else { 1 };
         if let Some(second_segment) = path.segments.get(second_segmment_index) {
             let name = second_segment.ident.name.as_str();
@@ -88,7 +95,9 @@ impl LeptosReexports {
                     span,
                     "usage of a third party library re-export from `leptos`",
                     None,
-                    format!("consider using `{help_rewrite_prefix}{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"),
+                    format!(
+                        "consider using `{help_rewrite_prefix}{rewrite_path_str}` instead. {HELP_FURTHER_INFO}"
+                    ),
                 );
             }
         }
@@ -121,7 +130,9 @@ impl<'tctx> LateLintPass<'tctx> for LeptosReexports {
                                 span,
                                 "usage of a third party library re-export from `leptos`",
                                 None,
-                                format!("consider using `use {rewrite_path_str}` instead. {HELP_FURTHER_INFO}"),
+                                format!(
+                                    "consider using `use {rewrite_path_str}` instead. {HELP_FURTHER_INFO}"
+                                ),
                             )
                         }
                     } else {

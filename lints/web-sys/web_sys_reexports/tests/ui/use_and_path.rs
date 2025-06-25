@@ -23,7 +23,7 @@ fn r#use() {
 
     // list stem
     #[allow(unused_imports)]
-    use web_sys::{wasm_bindgen, js_sys};
+    use web_sys::{js_sys, wasm_bindgen};
 
     // complex
     use web_sys::{HtmlElement, js_sys::Function};

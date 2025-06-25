@@ -36,7 +36,7 @@ fn r#use() {
 
     // list stem
     #[allow(unused_imports)]
-    use leptos::{wasm_bindgen, serde};
+    use leptos::{serde, wasm_bindgen};
     #[allow(unused_imports)]
     use {leptos::serde_json, leptos::tracing};
 
