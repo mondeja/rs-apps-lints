@@ -57,9 +57,9 @@ dylint_linting::declare_late_lint! {
     ///
     /// `web-sys` reexports the libraries `wasm-bindgen` and `js-sys`.
     /// This behaviour may has sense since `js-sys` and `wasm-bindgen` can be seen
-    /// as subsets of the `web-sys` ecosystem. But re-exports because it can lead to
-    /// dependency duplication, version conflicts, increase mantaintance burden
-    /// and reduce modularity in the codebase.
+    /// as subsets of the `web-sys` ecosystem. But re-exports should be avoided
+    /// because it can lead to dependency duplication, version conflicts,
+    /// increase mantaintance burden and reduce modularity in the codebase.
     pub WEB_SYS_REEXPORTS,
     Warn,
     "Check for usages of third party library re-exports from web-sys."
