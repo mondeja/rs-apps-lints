@@ -72,7 +72,6 @@ static FORBIDDEN_REEXPORTS: [&str; 5] =
 
 impl LeptosReexports {
     fn lint_single_path<R>(
-        &self,
         cx: &LateContext,
         path: &Path<R>,
         leptos_from_root: bool,
@@ -104,12 +103,14 @@ impl LeptosReexports {
     }
 }
 
-impl<'tctx> LateLintPass<'tctx> for LeptosReexports {
+impl LateLintPass<'_> for LeptosReexports {
     fn check_item(&mut self, cx: &LateContext, item: &Item) {
         if let Some((path, use_kind, leptos_from_root)) = is_leptos_use_item(item) {
             match use_kind {
                 // use leptos::wasm_bindgen::JsCast;
-                UseKind::Single(_) => self.lint_single_path(cx, path, leptos_from_root, "use "),
+                UseKind::Single(_) => {
+                    LeptosReexports::lint_single_path(cx, path, leptos_from_root, "use ");
+                }
                 UseKind::Glob => {
                     let second_segmment_index = if leptos_from_root { 2 } else { 1 };
                     if let Some(second_segment) = path.segments.get(second_segmment_index) {
@@ -133,7 +134,7 @@ impl<'tctx> LateLintPass<'tctx> for LeptosReexports {
                                 format!(
                                     "consider using `use {rewrite_path_str}` instead. {HELP_FURTHER_INFO}"
                                 ),
-                            )
+                            );
                         }
                     } else {
                         // use leptos::*;
@@ -148,21 +149,21 @@ impl<'tctx> LateLintPass<'tctx> for LeptosReexports {
                     }
                 }
                 // it seems that degenerate list stem is never matching
-                _ => {}
+                UseKind::ListStem => {}
             }
         }
     }
 
     fn check_expr(&mut self, cx: &LateContext, expr: &Expr) {
         if let Some((path, leptos_from_root)) = is_leptos_path_expr(expr) {
-            self.lint_single_path(cx, path, leptos_from_root, "");
+            LeptosReexports::lint_single_path(cx, path, leptos_from_root, "");
         }
     }
 }
 
 fn is_leptos_use_item<'a>(item: &'a Item) -> Option<(&'a UsePath<'a>, UseKind, bool)> {
     if let ItemKind::Use(path, use_kind) = item.kind {
-        match (path.segments.get(0), path.segments.get(1)) {
+        match (path.segments.first(), path.segments.get(1)) {
             (Some(first_segment), Some(second_segment)) => {
                 let first_segment_name = first_segment.ident.name.as_str();
                 let second_segment_name = second_segment.ident.name.as_str();
@@ -185,26 +186,26 @@ fn is_leptos_use_item<'a>(item: &'a Item) -> Option<(&'a UsePath<'a>, UseKind, b
 }
 
 fn is_leptos_path_expr<'a>(expr: &'a Expr) -> Option<(&'a Path<'a>, bool)> {
-    if let ExprKind::Path(qpath) = expr.kind {
-        if let QPath::Resolved(_, path) = qpath {
-            match (path.segments.get(0), path.segments.get(1)) {
-                (Some(first_segment), Some(second_segment)) => {
-                    let first_segment_name = first_segment.ident.name.as_str();
-                    let second_segment_name = second_segment.ident.name.as_str();
-                    if first_segment_name == "leptos" {
-                        return Some((path, false));
-                    } else if first_segment_name == "{{root}}" && second_segment_name == "leptos" {
-                        return Some((path, true));
-                    }
+    if let ExprKind::Path(qpath) = expr.kind
+        && let QPath::Resolved(_, path) = qpath
+    {
+        match (path.segments.first(), path.segments.get(1)) {
+            (Some(first_segment), Some(second_segment)) => {
+                let first_segment_name = first_segment.ident.name.as_str();
+                let second_segment_name = second_segment.ident.name.as_str();
+                if first_segment_name == "leptos" {
+                    return Some((path, false));
+                } else if first_segment_name == "{{root}}" && second_segment_name == "leptos" {
+                    return Some((path, true));
                 }
-                (Some(first_segment), None) => {
-                    let first_segment_name = first_segment.ident.name.as_str();
-                    if first_segment_name == "leptos" {
-                        return Some((path, false));
-                    }
-                }
-                _ => {}
             }
+            (Some(first_segment), None) => {
+                let first_segment_name = first_segment.ident.name.as_str();
+                if first_segment_name == "leptos" {
+                    return Some((path, false));
+                }
+            }
+            _ => {}
         }
     }
     None

@@ -107,7 +107,9 @@ Lints for [web-sys] based apps.
 
 | Rule                    | Description                                                      |
 | ----------------------- | ---------------------------------------------------------------- |
-| [`leptos_reexports`]    | Check for usages of third party library re-exports from web-sys. |
+| [`web_sys_reexports`]    | Check for usages of third party library re-exports from web-sys. |
+
+[`web_sys_reexports`]: https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
 ### leptos-more
 
