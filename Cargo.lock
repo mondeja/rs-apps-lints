@@ -689,7 +689,7 @@ version = "0.1.0"
 
 [[package]]
 name = "leptos_more_lints"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "dylint_linting",
  "leptos_reexports",
@@ -697,7 +697,7 @@ dependencies = [
 
 [[package]]
 name = "leptos_reexports"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clippy_utils",
  "dylint_linting",
@@ -1383,7 +1383,7 @@ version = "0.1.0"
 
 [[package]]
 name = "web_sys_lints"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "dylint_linting",
  "web_sys_reexports",
@@ -1391,7 +1391,7 @@ dependencies = [
 
 [[package]]
 name = "web_sys_reexports"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clippy_utils",
  "dylint_linting",

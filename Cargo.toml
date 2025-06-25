@@ -1,3 +1,10 @@
+[workspace.package]
+version = "0.1.1"
+edition = "2024"
+publish = false
+license = "Apache-2.0"
+repository = "https://github.com/leptos-rs/leptos-lints"
+
 [workspace]
 members = [
     "tests",
@@ -32,10 +39,3 @@ too_many_lines = "allow"
 [workspace.lints.rust.unexpected_cfgs]
 level = "deny"
 check-cfg = ["cfg(dylint_lib, values(any()))"]
-
-[workspace.package]
-version = "0.1.0"
-edition = "2024"
-publish = false
-license = "Apache-2.0"
-repository = "https://github.com/leptos-rs/leptos-lints"
