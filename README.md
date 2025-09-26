@@ -36,8 +36,6 @@ See `cargo dylint --help` for more information.
 
 ## Configuration
 
-### Workspace
-
 <!-- markdownlint-disable line-length -->
 
 ```toml
@@ -64,6 +62,19 @@ See all available lint libraries in the [lints directory] at _lints/_.
 
 ### Lint levels
 
+#### Cargo.toml
+
+Use `[lints.rust]` table in _Cargo.toml_ to set custom lint levels for each lint.
+
+For example, to set [`web_sys_reexports`] lint to `deny` in a workspace,
+add the next lines to the _Cargo.toml_ file.
+
+```toml
+[workspace.lints.rust]
+unknown_lints = { level = "allow", priority = -1 }
+web_sys_reexports = "deny"
+```
+
 #### RUSTFLAGS
 
 Use the `RUSTFLAGS` environment variable to set custom lint levels for each lint.
@@ -84,20 +95,41 @@ rustflags = ["-Dweb_sys_reexports"]
 The downside of this approach is that the project will be compiled from scratch
 every time you edit the `RUSTFLAGS` variable.
 
-#### Cargo.toml
+#### Rust compiler's behaviour about unknown lints
 
-Use `[lints.rust]` table in _Cargo.toml_ to set custom lint levels for each lint.
+When `cargo` picks up `RUSTFLAGS` or `[lints.rust]` configuration, it passes
+the lints as `rustc` command arguments in **reverse alphabetical order**. This
+behavior causes `unknown_lints` to be passed after some lints defined by this
+library (e.g., `web_sys_reexports`). In that case, `rustc` will trigger a
+warning like
 
-For example, to set [`web_sys_reexports`] lint to `deny` in a workspace,
-add the next lines to the _Cargo.toml_ file.
-
-```toml
-[workspace.lints.rust]
-unknown_lints = "allow"
-web_sys_reexports = "deny"
+```rust
+warning[E0602]: unknown lint: `web_sys_reexports`
 ```
 
-The downside of this approach is that unknown lints will be allowed by default.
+because it encounters these lints before they are recognized.  
+
+##### Cargo.toml
+
+To avoid this warning when configuring from *Cargo.toml*'s `[lints.rust]`,
+you need to explicitly **set the priority of `unknown_lints` to the lowest
+value** by adding a `priority` field to the `unknown_lints` entry, so that
+it is passed last to `rustc`:
+
+```toml
+[lints.rust]
+unknown_lints = { level = "allow", priority = -1 }
+```
+
+##### RUSTFLAGS
+
+To avoid this warning when configuring from `RUSTFLAGS`, you need to ensure
+that the `-A unknown_lints` (or `-D unknown_lints`, etc.) flag is the last
+lint-related flag in the `RUSTFLAGS` variable, so that it is passed last to `rustc`:
+
+```sh
+RUSTFLAGS="-Dweb_sys_reexports -Aunknown_lints" cargo dylint --all
+```
 
 ## Lints
 
@@ -107,7 +139,7 @@ Lints for [web-sys] based apps.
 
 | Rule                    | Description                                                      |
 | ----------------------- | ---------------------------------------------------------------- |
-| [`web_sys_reexports`]    | Check for usages of third party library re-exports from web-sys. |
+| [`web_sys_reexports`]   | Check for usages of third party library re-exports from web-sys. |
 
 [`web_sys_reexports`]: https://github.com/mondeja/rs-apps-lints/tree/main/lints/web-sys/web_sys_reexports#readme
 
@@ -120,8 +152,6 @@ additional lints that help developers follow best practices and avoid common
 pitfalls in Leptos applications, but are not included in the official lints for
 being too specific or opinionated.
 
-[Leptos official lints]: https://github.com/leptos-rs/leptos-lints
-
 | Rule                    | Description                                                     |
 | ----------------------- | --------------------------------------------------------------- |
 | [`leptos_reexports`]    | Check for usages of third party library re-exports from leptos. |
@@ -131,3 +161,4 @@ being too specific or opinionated.
 [Dylint]: https://github.com/trailofbits/dylint
 [Leptos]: https://leptos.dev
 [web-sys]: https://rustwasm.github.io/wasm-bindgen/api/web_sys/
+[Leptos official lints]: https://github.com/leptos-rs/leptos-lints
