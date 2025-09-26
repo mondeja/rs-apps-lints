@@ -98,7 +98,7 @@ every time you edit the `RUSTFLAGS` variable.
 #### Rust compiler's behaviour about unknown lints
 
 When `cargo` picks up `RUSTFLAGS` or `[lints.rust]` configuration, it passes
-the lints as `rustc` command arguments in **reverse alphabetical order**. This
+the lints as `rustc` command arguments in __reverse alphabetical order__. This
 behavior causes `unknown_lints` to be passed after some lints defined by this
 library (e.g., `web_sys_reexports`). In that case, `rustc` will trigger a
 warning like
@@ -111,9 +111,9 @@ because it encounters these lints before they are recognized.
 
 ##### Cargo.toml
 
-To avoid this warning when configuring from *Cargo.toml*'s `[lints.rust]`,
-you need to explicitly **set the priority of `unknown_lints` to the lowest
-value** by adding a `priority` field to the `unknown_lints` entry, so that
+To avoid this warning when configuring from _Cargo.toml_'s `[lints.rust]`,
+you need to explicitly __set the priority of `unknown_lints` to the lowest
+value__ by adding a `priority` field to the `unknown_lints` entry, so that
 it is passed last to `rustc`:
 
 ```toml
@@ -160,5 +160,5 @@ being too specific or opinionated.
 
 [Dylint]: https://github.com/trailofbits/dylint
 [Leptos]: https://leptos.dev
-[web-sys]: https://rustwasm.github.io/wasm-bindgen/api/web_sys/
+[web-sys]: https://docs.rs/web-sys/latest/web_sys/
 [Leptos official lints]: https://github.com/leptos-rs/leptos-lints
